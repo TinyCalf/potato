@@ -1,4 +1,4 @@
-package common
+package compnents
 
 import (
 	"potato/piface"
@@ -6,6 +6,7 @@ import (
 
 // HandlerService ..
 type HandlerService struct {
+	BaseCompnent
 	routers map[uint32]piface.IRouter
 }
 
@@ -14,6 +15,11 @@ func NewHandlerService() piface.IHandlerService {
 	return &HandlerService {
 		routers: make(map[uint32]piface.IRouter),
 	}
+}
+
+// GetName 获取组件名称
+func (hs *HandlerService) GetName() string {
+	return "HandlerService"
 }
 
 // AddRouter ..
@@ -25,7 +31,8 @@ func (hs *HandlerService) AddRouter(id uint32, router piface.IRouter) {
 }
 
 // DoHandle ..
-func (hs *HandlerService) DoHandle(session piface.ISession, msg piface.IMessage) {
+func (hs *HandlerService) DoHandle(session piface.ISession, 
+									msg piface.IMessage) {
 	routeID := msg.GetRouteID()
 	router := hs.routers[routeID]
 
@@ -33,3 +40,4 @@ func (hs *HandlerService) DoHandle(session piface.ISession, msg piface.IMessage)
 	router.Handle(session, msg)
 	router.After(session, msg)
 }
+

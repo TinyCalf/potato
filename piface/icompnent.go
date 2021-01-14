@@ -2,8 +2,6 @@ package piface
 
 //ICompnent 是组件的接口
 type ICompnent interface {
-	//获取所在应用
-	GetApp() IApplication
 	//获取组件名称
 	GetName() string
 	//app启动时的回调

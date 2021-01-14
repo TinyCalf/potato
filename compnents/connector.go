@@ -13,6 +13,7 @@ type Connector struct {
 	IPVersion string
 	IP string
 	Port int
+	OnNewSession func(socket *net.TCPConn)
 }
 
 //NewConnector 创建一个Connector
@@ -25,14 +26,14 @@ func NewConnector(app piface.IApplication) piface.IConnector {
 	}
 }
 
-// GetApp 获取所在应用
-func (c *Connector) GetApp() piface.IApplication {
-	return c.App
-}
-
 // GetName 获取组件名称
 func (c *Connector) GetName() string {
 	return "Connector"
+}
+
+// OnAppStart 在App启动时直接启动connector
+func (c *Connector) OnAppStart() {
+	c.Start()
 }
 
 // Start 启动服务
@@ -68,11 +69,6 @@ func (c *Connector) Start() {
 			sessionService.Create(socket)
 		}
 	}()
-}
-
-//OnAppStart 在App启动时直接启动connector
-func (c *Connector) OnAppStart() {
-	c.Start()
 }
 
 

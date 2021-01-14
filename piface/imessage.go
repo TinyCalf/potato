@@ -20,13 +20,13 @@ type IMessagePacker interface {
 	Pack(msg IMessage) ([]byte, error)
 }
 
-// IMessageUnPacker 是消息拆包工具
-type IMessageUnPacker interface {
+// IMessageUnpacker 是消息拆包工具
+type IMessageUnpacker interface {
 	//获取已经指定的头部长度
-	GetHeadLen()
+	GetHeadLen() uint32
 	//拆解Head部分，head部分长度从GetHeadLen获取
-	UnPackHead(msg IMessage, buf []byte) error
+	UnpackHead(msg IMessage, data []byte) error
 	//拆解Body部分
-	UnPackBody(msg IMessage, buf []byte) error 
+	UnpackBody(msg IMessage, data []byte) error 
 }
 
