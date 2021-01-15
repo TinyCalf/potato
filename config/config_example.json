@@ -1,0 +1,26 @@
+{
+    "dev": {
+        "gate": [
+            {"peerid": "gate0000", "host": "0.0.0.0", "remotePort":10000, "clientPort": 20000},
+            {"peerid": "gate0001", "host": "0.0.0.0", "remotePort":10001, "clientPort": 20001}
+        ],
+        "login": [
+            {"peerid": "login0000", "host": "0.0.0.0", "remotePort":10010, "clientPort": 20010},
+            {"peerid": "login0001", "host": "0.0.0.0", "remotePort":10011, "clientPort": 20011}
+        ],
+        "chat": [
+            {"peerid": "chat0000", "host": "0.0.0.0", "remotePort":10020, "clientPort": 20020},
+            {"peerid": "chat0001", "host": "0.0.0.0", "remotePort":10021, "clientPort": 20021}
+        ],
+        "game": [
+            {"peerid": "game0000", "host": "0.0.0.0", "remotePort":10030, "clientPort": 20030},
+            {"peerid": "game0001", "host": "0.0.0.0", "remotePort":10031, "clientPort": 20031}
+        ]
+    },
+    "staging": {
+
+    },
+    "prod": {
+
+    }
+}

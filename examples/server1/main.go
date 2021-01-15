@@ -6,7 +6,6 @@ import (
 	"potato/remote"
 	"potato"
 	"fmt"
-	"time"
 )
 
 // EchoRouter ..
@@ -30,17 +29,17 @@ func main() {
 
 	remote := app.GetComponent("Remote").(remote.ICompnent)
 	remote.SetAddress("0.0.0.0", 10000)
-	remote.AddPeer(1, "0.0.0.0", 10001)
+	remote.AddPeer(0, "0.0.0.0", 10001)
 	remote.RegistMethod("echo", func(msg string) string {
 		return msg
 	})
 
-	go app.Start()
+	app.Start()
 
-	for {
-		resp := remote.Call(1, "echo", "hello world!")
-		fmt.Printf("Remote Response:%s\n", resp)
-		time.Sleep(time.Second)
-	}
+	// for {
+	// 	resp := remote.Call(1, "echo", "hello world!")
+	// 	fmt.Printf("Remote Response:%s\n", resp)
+	// 	time.Sleep(time.Second)
+	// }
 
 }

@@ -10,8 +10,6 @@ import (
 
 func main(){
 	conn, _ := net.Dial("tcp", "0.0.0.0:8999")
-
-
 	
 	for {
 		data := []byte("hello world")
