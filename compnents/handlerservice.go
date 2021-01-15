@@ -2,6 +2,7 @@ package compnents
 
 import (
 	"potato/piface"
+	"fmt"
 )
 
 // HandlerService ..
@@ -35,6 +36,11 @@ func (hs *HandlerService) DoHandle(session piface.ISession,
 									msg piface.IMessage) {
 	routeID := msg.GetRouteID()
 	router := hs.routers[routeID]
+
+	if router == nil {
+		fmt.Printf("undefined routerID %d\n", routeID)
+		return
+	}
 
 	router.Before(session, msg)
 	router.Handle(session, msg)

@@ -13,6 +13,8 @@ type IMessage interface {
 	SetAppID(uint32)
 	SetRouteID(uint32)
 	SetData([]byte)
+
+	String() string
 }
 
 // IMessagePacker 是消息打包工具

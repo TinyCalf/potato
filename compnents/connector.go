@@ -38,7 +38,7 @@ func (c *Connector) OnAppStart() {
 
 // Start 启动服务
 func (c *Connector) Start() {
-	fmt.Println("Connector Starting...")
+	fmt.Println("Connector start receive new session")
 
 	addr, err := net.ResolveTCPAddr(c.IPVersion, 
 									fmt.Sprintf("%s:%d", c.IP, c.Port))
@@ -65,7 +65,7 @@ func (c *Connector) Start() {
 			}
 
 			//将连接交给SessionService处理
-			fmt.Println("get new session", socket)
+			fmt.Println("Connector found new session")
 			sessionService.Create(socket)
 		}
 	}()

@@ -1,9 +1,5 @@
 package compnents
 
-import (
-	"potato/piface"
-)
-
 //BaseCompnent 是基础组件，其他组件可以继承
 type BaseCompnent struct {}
 

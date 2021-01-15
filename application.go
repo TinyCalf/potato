@@ -20,11 +20,11 @@ func NewApplication() piface.IApplication {
 	//添加组件
 	connector := compnents.NewConnector(app)
 	sessionservice := compnents.NewSessionService(app)
-	handler := compnents.NewHandlerCompnent(app)
+	handlerservice := compnents.NewHandlerService()
 
 	app.AddComponent(connector)
 	app.AddComponent(sessionservice)
-	app.AddComponent(handler)
+	app.AddComponent(handlerservice)
 
 	return app
 }

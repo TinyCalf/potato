@@ -4,6 +4,7 @@ import (
 	"potato/piface"
 	"bytes"
 	"encoding/binary"
+	"fmt"
 )
 
 // MessagePacker 消息打包工具
@@ -82,6 +83,12 @@ func (m *MessageUnpacker) UnpackHead(msg piface.IMessage, data []byte) error {
 	} 
 	msg.SetAppID(appID)
 
+	var routeID uint32
+	if err := binary.Read(buf, binary.BigEndian, &routeID); err != nil {
+		return err
+	} 
+	msg.SetRouteID(routeID)
+
 	return nil
 }
 
@@ -109,6 +116,11 @@ type Message struct {
 //NewMessage ...
 func NewMessage() piface.IMessage{
 	return &Message{}
+}
+
+func (m *Message) String() string {
+	return fmt.Sprintf("[Len:%d][ID:%d][AppID:%d][RouteID:%d][%s]",
+		m.Len, m.ID, m.AppID, m.RouteID, string(m.Data))
 }
 
 // GetLen ..
@@ -147,7 +159,7 @@ func (m *Message) GetRouteID() uint32 {
 }
 
 // SetRouteID ..
-func (m *Message) SetRouteID( routeID uint32) {
+func (m *Message) SetRouteID(routeID uint32) {
 	m.RouteID = routeID
 }
 

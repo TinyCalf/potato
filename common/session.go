@@ -45,16 +45,14 @@ func (s *Session) GetID() uint32 {
 
 // Start 启动routine开始工作，收发信息
 func (s *Session) Start() {
-	fmt.Printf("session %d 开始收发工作", s.GetID())
+	fmt.Printf("session %d start working\n", s.GetID())
 	go s.startReader()
 	go s.startWriter()
 }
 
 func (s *Session) startReader() {
-	fmt.Printf("Session%d reader routine running\n", s.ID)
-	defer fmt.Printf("Session%d reader routine exited\n", s.ID)
-
-	//Reader出错，客户端可能断开或其他任何原因都应该释放session
+	fmt.Printf("Session %d reader routine running\n", s.ID)
+	defer fmt.Printf("Session %d reader routine exited\n", s.ID)
 	defer s.App.GetComponent("SessionService").
 		(piface.ISessionService).Del(s.ID)
 
@@ -68,6 +66,8 @@ func (s *Session) startReader() {
 			if err != nil {
 				return
 			}
+
+			fmt.Printf("Session %d get new msg: %v\n", s.ID, msg)
 
 			//将消息传递给handlerservice处理
 			hs := s.App.GetComponent("HandlerService").(piface.IHandlerService)
@@ -83,7 +83,7 @@ func (s *Session) readMessage() (piface.IMessage, error) {
 	//读取msg head
 	headData := make([]byte, unpacker.GetHeadLen())
 	if _, err := io.ReadFull(s.Socket, headData); err != nil {
-		fmt.Println("read message head error ", err)
+		fmt.Println("read message head error: ", err)
 		return nil, err
 	}
 	if err := unpacker.UnpackHead(msg, headData); err != nil {
@@ -104,8 +104,8 @@ func (s *Session) readMessage() (piface.IMessage, error) {
 }
 
 func (s *Session) startWriter() {
-	fmt.Printf("Session%d writer routine running\n", s.ID)
-	defer fmt.Printf("Session%d writer routine exited\n", s.ID)
+	fmt.Printf("Session %d writer routine running\n", s.ID)
+	defer fmt.Printf("Session %d writer routine exited\n", s.ID)
 	defer s.App.GetComponent("SessionService").
 		(piface.ISessionService).Del(s.ID)
 	
@@ -169,15 +169,15 @@ func (s *Session) Close() {
 	s.closed = true
 
 	//关闭read routine
-	if _, ok := <-s.exitReaderChan; ok {
-		s.exitReaderChan <- true
-	}
+	// if _, ok := <-s.exitReaderChan; ok {
+	// 	s.exitReaderChan <- true
+	// }
 	close(s.exitReaderChan)
 	
 	//关闭write routine
-	if _, ok := <-s.exitWriterChan; ok {
-		s.exitWriterChan <- true
-	}
+	// if _, ok := <-s.exitWriterChan; ok {
+	// 	s.exitWriterChan <- true
+	// }
 	close(s.exitWriterChan)
 
 	//释放socket
