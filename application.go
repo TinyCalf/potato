@@ -4,6 +4,7 @@ import (
 	"potato/piface"
 	"potato/compnents"
 	"potato/remote"
+	"potato/config"
 	"fmt"
 )
 
@@ -23,11 +24,13 @@ func NewApplication() piface.IApplication {
 	sessionservice := compnents.NewSessionService(app)
 	handlerservice := compnents.NewHandlerService()
 	remote := remote.NewCompnent()
+	config := config.NewCompnent()
 
 	app.AddComponent(connector)
 	app.AddComponent(sessionservice)
 	app.AddComponent(handlerservice)
 	app.AddComponent(remote)
+	app.AddComponent(config)
 
 	return app
 }

@@ -8,4 +8,5 @@ import (
 type ICompnent interface {
 	piface.ICompnent
 	Load(filePath string)
+	SetEnv(env string)
 }
