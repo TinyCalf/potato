@@ -16,10 +16,8 @@ type Compnent struct{
 func NewCompnent(app piface.IApplication) ICompnent{
 	c := &Compnent{}
 	c.app = app
-	c.host = "0.0.0.0"
-	c.port = 9000
 	c.peers = make(map[string]*peer)
-	c.methods = make(map[string](func(string) string))
+	c.methods = make(map[string]RPCFunc)
 	return c
 }
 
@@ -31,8 +29,18 @@ func (c *Compnent) GetName() string{
 // OnAppStart ..
 func (c *Compnent) OnAppStart() {
 	//从Config模块获取各种信息并注册
-	config := app.GetComponent("Config").(config.Compnent)
-	config.SetLocalPeer(appname string, peerid string)
+	config := c.app.GetComponent("Config").(config.ICompnent)
+
+	//读取本地节点信息
+	p := config.GetLocalPeerInfo()
+	c.peerid = p.PeerID 
+	c.host = p.Host
+	c.port = p.RemotePort 
+
+	//读取所有节点信息
+	for _, pi := range config.GetAllPeerInfo() {
+		c.RegistPeer(pi.PeerID, pi.Host, pi.RemotePort)
+	}
 
 	c.Start()
 }

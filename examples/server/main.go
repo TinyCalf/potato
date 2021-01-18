@@ -9,19 +9,6 @@ import (
 	"time"
 )
 
-// EchoRouter ..
-type EchoRouter struct{
-	common.BaseRouter
-}
-
-// Handle ..
-func (r *EchoRouter) Handle(session piface.ISession, msg piface.IMessage){
-	err := session.Send(msg)
-	if err != nil {
-		fmt.Println(err)
-	}
-}
-
 func main() {
 	app := potato.NewApplication()
 
