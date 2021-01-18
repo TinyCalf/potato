@@ -12,11 +12,13 @@ import (
 type Compnent struct {
 	piface.BaseCompnent
 	Env string
-	Config map[string](map[string]([]Peer))
+	localPeerInfo *PeerInfo
+	Config map[string](map[string]([]*PeerInfo))
+	peersOfID map[string]*PeerInfo
 }
 
-// Peer ..
-type Peer struct {
+// PeerInfo ..
+type PeerInfo struct {
 	PeerID string `json:"peerid"`
 	Host string `json:"host"`
 	RemotePort int `json:"remotePort"`
@@ -57,7 +59,7 @@ func (c *Compnent) Load(filePath string) {
 	}
 
 	//将json数据解析到struct中
-	config := make(map[string](map[string]([]Peer)))
+	config := make(map[string](map[string]([]*PeerInfo)))
 	err = json.Unmarshal(data, &config)
 	if err != nil {
 		panic(err)
@@ -68,4 +70,53 @@ func (c *Compnent) Load(filePath string) {
 // SetEnv 设置运行环境
 func (c *Compnent) SetEnv(env string) {
 	c.Env = env
+}
+
+// SetLocalPeer 指定本地peer
+func (c *Compnent) SetLocalPeer(appname string, peerid string) {
+	env := c.Config[c.Env]
+	if env == nil {
+		panic("local peer not found!")
+	}
+
+	app := env[appname]
+	if app == nil {
+		panic("local peer not found!")
+	}
+
+	for _, peerinfo := range app {
+		if peerinfo.PeerID == peerid {
+			c.localPeerInfo = peerinfo
+			return
+		}
+	}
+
+	panic("local peer not found!")
+}
+
+// GetLocalPeerInfo 获取本地节点信息
+func (c *Compnent) GetLocalPeerInfo() *PeerInfo {
+	if c.localPeerInfo == nil {
+		panic("local peer has not been set!")
+	}
+	return c.localPeerInfo
+}
+
+// GetAllPeerInfo 获取所有远程节点
+func (c *Compnent) GetAllPeerInfo() map[string]*PeerInfo {
+	m := make(map[string]*PeerInfo)
+
+	env := c.Config[c.Env]
+	if env == nil {
+		panic("local peer not found!")
+	}
+
+	for appname := range env {
+		app := env[appname]
+		for _, peerinfo := range app {
+			m[peerinfo.PeerID] = peerinfo
+		}
+	}
+
+	return m
 }

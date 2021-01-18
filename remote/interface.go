@@ -6,15 +6,14 @@ import (
 
 // IService 是远程服务 
 type IService interface {
-	AddPeer(peerid uint32, host string, port int)
+	AddPeer(peerid string, host string, port int)
 	RegistMethod(methodName string, method func(string) string)
 	Start()
-	Call(peerid uint32, methodName string, req string) string
+	Call(peerid string, methodName string, req string) string
 }
 
 // ICompnent ..
 type ICompnent interface {
 	piface.ICompnent
 	IService
-	SetAddress(host string, port int)
 }

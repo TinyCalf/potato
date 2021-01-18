@@ -8,25 +8,27 @@ import (
 )
 
 type peer struct {
-	id uint32
+	id string
 	host string
 	port int
 }
 
 // Service 远程服务
 type Service struct {
+	peerid string
 	host string
 	port int
-	peers map[uint32]*peer
+	peers map[string]*peer
 	methods map[string](func(string) string)
 }
 
 // NewService ..
-func NewService(host string, port int) IService {
+func NewService(peerid string, host string, port int) IService {
 	return &Service{
+		peerid: peerid,
 		host:host,
 		port:port,
-		peers: make(map[uint32]*peer),
+		peers: make(map[string]*peer),
 		methods: make(map[string](func(string) string)),
 	}
 }
@@ -58,7 +60,7 @@ func (r *Rpccall) Call(req Request, resp *Response) error {
 }
 
 // AddPeer 增加远程节点
-func (rs *Service) AddPeer(peerid uint32, host string, port int) {
+func (rs *Service) AddPeer(peerid string, host string, port int) {
 	if _, ok := rs.peers[peerid]; ok {
 		panic(fmt.Sprintf("duplicate peerid %d",peerid))
 	}
@@ -88,7 +90,7 @@ func (rs *Service) Start() {
 }
 
 // Call 调用远程接口
-func (rs *Service) Call(peerid uint32, name string, msg string) string{
+func (rs *Service) Call(peerid string, name string, msg string) string{
 	peer := rs.peers[peerid]
 	if peer == nil {
 		return ""
